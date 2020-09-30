@@ -4,7 +4,9 @@ const Cors = require("cors");
 const BodyParser = require("body-parser");
 const { request, response } = require("express");
 
-const client = new MongoClient("mongodb+srv://root:rootpass@cluster2.dmku2.mongodb.net/sample_mflix?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true })
+var url = //ENTER YOUR ATLAS URL HERE
+
+const client = new MongoClient(url,{ useNewUrlParser: true, useUnifiedTopology: true })
 const server = Express();
 
 server.use(BodyParser.json());
