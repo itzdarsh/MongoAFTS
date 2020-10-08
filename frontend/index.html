@@ -8,14 +8,18 @@
 	integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
 	crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 </head>
 <body>
 <div class="ui-widget">
 <lable for="title">Title:</lable><br>
 <input id="title">
 <ul id="cast"></ul>
-<ul id="fullplot"></ul>
+<ul id="highlights"></ul>
+<ul id="results"></ul>
 </div>
+
+
 <script>
 	$(document).ready(function(){
 		$("#title").autocomplete({
@@ -23,7 +27,7 @@
 				let data = await fetch(`http://localhost:3000/search?term=${request.term}`)
 					.then(results => results.json())
 					.then(results => results.map(result => {
-						return { label: result.title, value: result.title, id:result._id };
+						return { label: result.title, value: result.title, id:result._id,highlights: result.highlights };
 					}));
 					response(data);
 				},
@@ -33,17 +37,24 @@
 					.then(result => result.json())
 					.then(result => {
 						$("#cast").empty();
-						result.title;
-						ui.item.title;
-						$("#title").val(result.title)
-						result.fullplot;
 						$("#cast").append("<br><b><h3>Casting:</h3></b>")
 						result.cast.forEach(cast1 => {
 							$("#cast").append(`<li>${cast1}</li>`);
 							
 						})
 						$("#cast").append("<br><b><h3>Summary:</h3></b>")
-						$("#cast").append(`${result.fullplot}`);
+						ui.item.highlights.forEach(highlight => { 
+  							highlight.texts.forEach(text1 => {
+    								if(text1.type === "hit"){
+      									$("#cast").append(`<mark>${text1.value}</mark>`);
+    								} else {
+    									$("#cast").append(`${text1.value}`);
+    								}
+  							})
+						});
+						if(ui.item.highlights.length === 0){
+							$("#cast").append(`${result.fullplot}`)
+						}
 						$("#cast").append("<br><b><h3>Poster:</h3></b>")
 						$("#cast").append(`<img src=${result.poster} width="300" height="400">`);
 
