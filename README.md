@@ -46,7 +46,7 @@ Setting up backend:
 edit the MongoDB connectivity Atlas connection string in the MongoClient() constructor.
 4. node main.js
 
-hit localhost:3001 (search in server.listen() method if not 3001)
+hit localhost:3000 (search in server.listen() method if not 3000)
 
 Setting up frontend:
 Simple and Easy step is [host the index.html in realm](https://docs.mongodb.com/realm/hosting/host-a-single-page-application/)
