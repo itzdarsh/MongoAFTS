@@ -27,7 +27,7 @@
 				let data = await fetch(`http://localhost:3000/search?term=${request.term}`)
 					.then(results => results.json())
 					.then(results => results.map(result => {
-						return { label: result.title, value: result.title, id:result._id,highlights: result.highlights };
+						return { label: result.title, value: result.value, id:result._id,highlights: result.highlights };
 					}));
 					response(data);
 				},
@@ -37,13 +37,19 @@
 					.then(result => result.json())
 					.then(result => {
 						$("#cast").empty();
+						$("#cast").append("<br><b><h3>Title:</h3></b>")
+						$("#cast").append(`${result.title}<br><br>`)
+						$("#cast").append(`<br><img src=${result.poster} width="300" height="400">`);
 						$("#cast").append("<br><b><h3>Casting:</h3></b>")
 						result.cast.forEach(cast1 => {
 							$("#cast").append(`<li>${cast1}</li>`);
 							
 						})
 						$("#cast").append("<br><b><h3>Summary:</h3></b>")
-						ui.item.highlights.forEach(highlight => { 
+						if(ui.item.highlights.length === 0){
+							$("#cast").append(`${result.fullplot}`)
+						} else {
+							ui.item.highlights.forEach(highlight => { 
   							highlight.texts.forEach(text1 => {
     								if(text1.type === "hit"){
       									$("#cast").append(`<mark>${text1.value}</mark>`);
@@ -52,14 +58,8 @@
     								}
   							})
 						});
-						if(ui.item.highlights.length === 0){
-							$("#cast").append(`${result.fullplot}`)
 						}
-						$("#cast").append("<br><b><h3>Poster:</h3></b>")
-						$("#cast").append(`<img src=${result.poster} width="300" height="400">`);
-
 					});
-					//document.body.innerHTML = ui.item.title;
 					
 					}
 			});
