@@ -4,8 +4,7 @@ const Cors = require("cors");
 const BodyParser = require("body-parser");
 const { request, response } = require("express");
 
-//var url = "mongodb+srv://root:rootpass@cluster2.dmku2.mongodb.net/sample_mflix?retryWrites=true&w=majority"
-var url = "mongodb+srv://root:rootpass@mflix.nx5yk.mongodb.net/sample_mflix?retryWrites=true&w=majority"
+var url = "mongodb+srv://USER:PASSWORD@/sample_mflix?retryWrites=true&w=majority"
 
 const client = new MongoClient(url,{ useNewUrlParser: true, useUnifiedTopology: true })
 const server = Express();
@@ -22,14 +21,20 @@ server.get("/search", async(request,response) => {
 	let result = await collection.aggregate([
 	{
 	"$search": {"autocomplete": 
-		{"query":`${request.query.term}`,"path":"title","fuzzy":{"maxEdits":2}
+		{"query":`${request.query.term}`,"path":"title"
+	//	,"fuzzy":{"maxEdits":2}
 	//	{"query":`${request.query.term}`,"path":"fullplot","fuzzy":{"maxEdits":2}}
-	},"highlight" : {"path": "fullplot"}
+	}
+	//,"highlight" : {"path": "fullplot"}
 	
 	}},
 	{
 	$project:{cast:1, fullplot:1, "highlights":{$meta:"searchHighlights"},poster:1, title:1}
+	},
+	{
+		$project:{cast:1, fullplot:1, highlights:{$ifNull:["$highlights",[]]},poster:1, title:1}
 	}
+
 	]).toArray();
   response.send(result);
   } catch(e){
@@ -58,6 +63,3 @@ server.listen("3000", async () => {
 	console.error(e);
   }
 });
-
-
-
