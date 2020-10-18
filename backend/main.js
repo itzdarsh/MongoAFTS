@@ -21,22 +21,22 @@ server.get("/search", async(request,response) => {
   try{
 	let result = await collection.aggregate([
 	{
-	"$search": {"autocomplete": 
-		{"query":`${request.query.term}`,"path":"title"
-	//	,"fuzzy":{"maxEdits":2}
-	//	{"query":`${request.query.term}`,"path":"fullplot","fuzzy":{"maxEdits":2}}
-	}
-	//,"highlight" : {"path": "fullplot"}
-	
-	}},
+		"$search": {
+			"autocomplete": {
+				"query":`${request.query.term}`,"path":"title"
+				//	,"fuzzy":{"maxEdits":2}
+					}
+		//,"highlight" : {"path": "fullplot"}
+		}
+	},
 	{
-	$project:{cast:1, fullplot:1, "highlights":{$meta:"searchHighlights"},poster:1, title:1}
+		$project:{cast:1, fullplot:1, "highlights":{$meta:"searchHighlights"},poster:1, title:1}
 	},
 	{
 		$project:{cast:1, fullplot:1, highlights:{$ifNull:["$highlights",[]]},poster:1, title:1}
 	}
 
-	]).toArray();
+]).toArray();
   response.send(result);
   } catch(e){
 	response.status(500).send({message: e.message});
