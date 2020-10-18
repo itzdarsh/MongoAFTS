@@ -4,7 +4,8 @@ const Cors = require("cors");
 const BodyParser = require("body-parser");
 const { request, response } = require("express");
 
-var url = "mongodb+srv://USER:PASSWORD@/sample_mflix?retryWrites=true&w=majority"
+// Update atlas URI in below between " "
+var url = "mongodb+srv://USER:PASSWORD@GET.From.Atlas/sample_mflix?retryWrites=true&w=majority"
 
 const client = new MongoClient(url,{ useNewUrlParser: true, useUnifiedTopology: true })
 const server = Express();
